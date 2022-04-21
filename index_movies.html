@@ -12,31 +12,45 @@
 	
 	$(document).ready(function(){
 		$('#next').click(function(){
+			//when ever hit the load more button page no will be fetch and increament by 1 and the load new page through fetch_data function
 			page_no=Number(page_no) + 1;
 			fetch_data(page_no);
 		})
 	})
+
 	function fetch_data(page_no){
+		//proced to hit a API.
 		$.ajax({
 		url:'https://api.themoviedb.org/3/movie/top_rated?api_key=1fd5e19ceaed39ad23e1d99cd793979a&language=en-US&page='+page_no,
+
+		//sending the data through GET method.
 		method:'GET' ,
+
+		//if hitting API make successfull.
 		success:function(data){
 			console.log(data);
-
+			//fetching movies data from result folder(make into tmdb).
 			var movies=data.results;
 			page_no=data.page;
 
+			//starting a loop that will fetch moives title and relesedate upto length of the movie.
+
 			for(var i=0;i<movies.length;i++){
 
-				console.log(movies[i].title)
+				console.log(movies[i].title)//display movie's title at console.
 
-				console.log(movies[i].release_date)
+				console.log(movies[i].release_date)//display movie's release date at console.
 
+
+				//Getting the tmdb poster path from google and poster img(.jpg) that get from API and join them to get poster(that make complete poster path).
 				var poster_path='https://image.tmdb.org/t/p/w500/'+movies[i].poster_path;
 
+				//sending movie's name poster at display id to show into the website
+				//To make the card clickable put the div into a <a> tag.
 				$('#display').append('<div class="col-md-2 mt-5"><a href="details.html?id='+movies[i].id+'"><div class="card"><img src="'+ poster_path +'" class="card-img-top"><p class="p-2"><b>'+ movies[i].title +'</b><br><span class="text-muted">'+ movies[i].release_date +'</span></p></div></a></div>')
 			}
 		},
+		//if jquery fail to hit the API.
 		error:function(error){
 			console.log(error);
 		}
@@ -45,10 +59,19 @@
 	}
 </script>
 <style type="text/css">
+	/*
+	website navgation bar background color.
+	*/
+
 	.bg-nav{
 		background-color: #032541;
 
 	}
+
+
+	/*
+	customize jumbotron background pic and size and position.
+	*/
 	.jumbotron{
 		background-image: url(https://assets3.thrillist.com/v1/image/2743747/792x528/scale;jpeg_quality=60;progressive.jpg);
 		background-repeat: no-repeat;
@@ -67,20 +90,25 @@
 	#page_nav button:hover{
 		background-color: #130f40;
 	}
+
+
 	
 
 </style>
 <body>
 	<div class="navber bg-nav">
-		<h2 class="text-white">Movie App</h2>
+		<h1 class="text-white" style="margin: 0px;">Movie App</h1>
 	</div>
 	
+	<!-- Making jumbotron at front page.  -->
 	<div class="jumbotron">
 		<h1 class="display-1 text-white">Welcome.</h1>
 		<h1 class="display-4 text-white">Millions of movies, TV shows and people to discover. Explore now.</h1>
 		<input type="text" class="form-control form-control-lg mt-5" name="">
 		<button class=" btn bg-nav btn-lg text-white mt-3">Serch</button>
 	</div>
+
+	<!--Creating a container to display movies and poster.keep it blank because movie name and poster will be insert here directly by javascript append method. -->
 	<div class="container">
 		<h1>Top Movies</h1>
 		<div class="row mt-3 " id="display">
